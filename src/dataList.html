@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>List View</title>
+</head>
+<body> 
+  <div>
+    <ul class="result">
+    </ul>
+  </div> 
+  <script type="template" id="template">
+    	<li>
+        	{{datalist}} 
+      	</li>
+  </script>
+  <script>
+  	
+  	var dataList =function(){
+		  var data =[];
+		  var template = document.querySelector('#template').innerHTML;
+		  var result = document.querySelector('.result');
+		  
+		  
+		  	var templateMaker = function (template, data){
+		  	var templateFragment = '';
+		 		for(var i=0; i< data.length; i++){
+		        templateFragment += template.replace(/\{\{datalist\}\}/, data[i])
+		      	}
+		        return templateFragment;
+		  };
+		  result.innerHTML = templateMaker(template, data);
+		  
+		}();
+  </script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>List View</title>
+</head>
+<body> 
+  <div id="listStuff">
+    
+  </div> 
+  <div id="listStuff1">
+  	<ul class="list-wrap" id="listWrap">
+  		
+  	</ul>
+  </div>
+  <script type="template" id="template">
+    	<li>
+        	{{name}}:{{value}} 
+      	</li>
+      	
+
+  </script>
+  <script>
+  	let data = [{name: 'om', value: 'jscoder'},{name: 'risi', value: 'jsnoob'}];
+  	let data1 = [{name: 'anjali', value: 'jscoder'},{name: 'om', value: 'jsnoob'}];
+  	const settings = {
+		tmpl: {
+			wrapper: '<ul class="list-wrap"><li>{{list}}</li></ul>',
+			item: document.querySelector('#template').innerHTML
+		}
+		//root: document.querySelector('#listStuff')
+	};
+	const settings1 = {
+		tmpl: {
+			wrapper: '<ul class="list-wrap"><li>{{list}}</li></ul>',
+			item: document.querySelector('#template').innerHTML
+		}
+		//root: document.createElement('<div id = "#listStuff'+ +'>')
+	};
+  
+
+			
+		HTMLElement.prototype._creatList= function(data, settings) {
+			this.settings = settings;
+			var target = this;
+
+			this.list = new Global(data, settings, target);
+			this.list.createView(target);
+			 		
+		};
+		HTMLElement.prototype._appendList= function(data){
+			
+			  this.list.augment(data);
+		}
+
+
+		var Global = (function(){
+			 
+			 
+			 var templateExp = `<li>{{name}}:{{value}}</li>`;
+			 var regExp = /\{\{(\w*)\}\}/g ;
+
+
+			function templateMaker(listTmpl, data, target){
+				
+				var getListTmplCopy = function(){
+						return listTmpl;
+					}, res = '';
+
+			 	for(let i=0; i< data.length; i++){
+		        		
+	      				res += templateExp.replace(regExp, function(regex_match, captured){return data[i][captured]});
+	      			}
+
+	      			
+
+	      			return target.innerHTML += res;
+			 	}
+
+
+			 function templateUpdate(data, target){
+			 	
+			 	
+			 		var getTmplList = function(){
+			 			 return rootTmpl;
+			 		},result ='';
+
+			 		for(let i=0; i< data.length; i++){
+		        		
+	      				result += templateExp.replace(regExp, function(regex_match, captured){return data[i][captured]});
+	      			}
+
+	      			return target.innerHTML += result;
+				}
+
+		
+ 
+			var ListView = function(data, settings, target){
+					this.data = data;
+					this.settings = settings;
+					this.target = target
+					
+				};
+		
+				ListView.prototype.createView = function(){
+					regEx = /OL|UL/ ;
+					wrapperEl = this.target.tagName
+
+					if(!regEx.test(wrapperEl)){
+
+						var wrapperElement = document.createElement('ul');
+							wrapperElement.setAttribute("class", "list-wrap" );
+							wrapperEl.appendChild(wrapperElement);
+
+							newTarget = wrapperElement;
+
+					}
+					else{
+
+						newTarget = this.target;
+					}
+					 
+					 return templateMaker(this.settings, this.data, newTarget);
+				}
+
+				ListView.prototype.augment = function(data){
+								
+					return templateUpdate(data, this.target);
+				}
+
+				return ListView;
+
+		})();
+
+  </script>
+</body>
+</html>
